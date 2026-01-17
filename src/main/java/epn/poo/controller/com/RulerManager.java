@@ -10,5 +10,5 @@ package epn.poo.controller.com;
  * @author santi
  */
 public class RulerManager {
-    
+
 }
