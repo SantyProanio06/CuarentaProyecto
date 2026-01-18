@@ -12,9 +12,7 @@ import java.util.ArrayList;
  */
 public class RulerController {
     public boolean isAgarrarCarta(Carta cSeleccionada, Carta cSelecMesa){
-        boolean valor = false;
-        if(cSelecMesa.equals(cSeleccionada))valor = true;
-        return valor;
+        return (cSeleccionada.getNumero() == cSelecMesa.getNumero());
     }
     
     public boolean isSuma(ArrayList<Carta> cartasSelecSuma, Carta cartaSelec ){
@@ -28,22 +26,23 @@ public class RulerController {
     }
     
     public boolean esCaida(Carta cSeleccionada, Carta cLanzada, Carta cUltimaLanzada){
-    return (cSeleccionada.equals(cUltimaLanzada) && cLanzada.equals(cUltimaLanzada))? true : false;
+    return (cSeleccionada.getNumero() == cUltimaLanzada.getNumero() && 
+            cLanzada.getNumero() == cUltimaLanzada.getNumero());
     }
     
     public boolean esLimpia(ArrayList<Carta> mesa){
-        return (mesa.isEmpty() || mesa.size() == 0)? true :  false; 
+        return mesa.isEmpty(); 
     }
     
-    public boolean esEscalera(int index,ArrayList<Carta> cartasMesa, Carta cartaMazo){
-        if (cartasMesa.isEmpty()) return false;
-
-        if (cartaMazo.getNumero() != cartasMesa.get(index).getNumero() - 1) {
+    public boolean esEscalera(int index,ArrayList<Carta> cartasSelecMesa, Carta cartaMazo){
+        if (cartasSelecMesa.isEmpty()) return false;
+        
+        if (cartaMazo.getNumero() != cartasSelecMesa.get(index).getNumero() - 1) {
             return false;
         }
 
-        for (int i = 0; i < cartasMesa.size() - 1; i++) {
-            if (cartasMesa.get(i).getNumero() + 1 != cartasMesa.get(i + 1).getNumero()) {
+        for (int i = index; i < cartasSelecMesa.size() - 1; i++) {
+            if (cartasSelecMesa.get(i).getNumero() + 1 != cartasSelecMesa.get(i + 1).getNumero()) {
                 return false;
             }
         }

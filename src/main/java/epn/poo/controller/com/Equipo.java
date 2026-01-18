@@ -42,5 +42,7 @@ public class Equipo {
         this.carton = carton;
     }
     
-    
+    public void aumentarPerros(){
+        setPerros(getPerros() + 2);
+    }
 }
