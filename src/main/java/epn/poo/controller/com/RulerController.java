@@ -35,14 +35,20 @@ public class RulerController {
         return (mesa.isEmpty() || mesa.size() == 0)? true :  false; 
     }
     
-    public boolean esEscalera(int index, ArrayList<Carta> cartaSelectMesa, Carta cartaSelectMaso){
-        boolean valor = false;
-        if(cartaSelectMaso.getNumero() == (cartaSelectMesa.get(index).getNumero() -1 )){
-            for(int i = 0; i < (cartaSelectMesa.size() - 1); i++){
-                if(cartaSelectMesa.get(i).getNumero() == (cartaSelectMesa.get(i + 1).getNumero() - 1)) valor = true;
+    public boolean esEscalera(int index,ArrayList<Carta> cartasMesa, Carta cartaMazo){
+        if (cartasMesa.isEmpty()) return false;
+
+        if (cartaMazo.getNumero() != cartasMesa.get(index).getNumero() - 1) {
+            return false;
+        }
+
+        for (int i = 0; i < cartasMesa.size() - 1; i++) {
+            if (cartasMesa.get(i).getNumero() + 1 != cartasMesa.get(i + 1).getNumero()) {
+                return false;
             }
         }
-        return valor;
+
+        return true;
     }
 }
 
