@@ -12,35 +12,31 @@ import java.util.ArrayList;
  * @author santi
  */
 public class RulerManager {
+
+    ControladorJugador conJug = new ControladorJugador();
+        
+    RulerController rulerCont = new RulerController();
+    
+    EstadosValidacion eVal = new EstadosValidacion();
+    public RulerManager() {
+    }
   
-    public void manager(ArrayList<Carta> mesa, ArrayList<Carta> cartaSelecMesa, 
-            Carta cLanzada, Equipo equipo, Carta ultLanzada){
-       RulerController rc = new RulerController();
-       ControladorJugador cj = new ControladorJugador();
-        
-       ArrayList<Carta> cartasSuma = new ArrayList<>();
-       cartasSuma.add(cartaSelecMesa.get(0));
-       cartasSuma.add(cartaSelecMesa.get(1));
-        
-       for (Carta c : cartaSelecMesa){
-           if(rc.isAgarrarCarta(c, cLanzada)){
-               if(rc.esCaida(c, cLanzada, ultLanzada)) equipo.setPerros(equipo.getPerros() + 2);
-               if(rc.esEscalera(1, cartaSelecMesa, cLanzada)){
-                   cj.cojerCartas(cartaSelecMesa, equipo.getCarton(), mesa);
-               }
-               else {
-                   cj.cojerCartas(cartaSelecMesa, equipo.getCarton(), mesa);
-               }
-               if(rc.esLimpia(mesa)) equipo.setPerros(equipo.getPerros() + 2);
-           }else if(rc.isSuma(cartasSuma, cLanzada)){
-               if(rc.esEscalera(2, cartaSelecMesa, cLanzada)){
-                   cj.cojerCartas(cartaSelecMesa, equipo.getCarton(), mesa);
-               }
-               else {
-                   cj.cojerCartas(cartaSelecMesa, equipo.getCarton(), mesa);
-               }
-               if(rc.esLimpia(mesa)) equipo.setPerros(equipo.getPerros() + 2); 
-           }
-       } 
+    public void rulerManagermetodo(Carta cartaLanzada, ArrayList<Carta> cartasSeleccionadasMesa,
+    ArrayList<Carta> mesa,Equipo equipoActual,Carta ultimaCartaLanzada){
+        ArrayList<Carta> cartasSumar = new ArrayList<Carta>();
+        if(cartasSeleccionadasMesa.size() > 1){
+        cartasSumar.add(cartasSeleccionadasMesa.get(0));
+        cartasSumar.add(cartasSeleccionadasMesa.get(1));
+        }
+        int tipoJugadavalidador = cartasSeleccionadasMesa.size();
+     
+        //Validacion de si es que solo se escoge una carta de la mesa
+        if(tipoJugadavalidador == 1){
+            eVal.unaCartaSeleccionada(cartaLanzada, cartasSeleccionadasMesa.get(0), ultimaCartaLanzada, equipoActual, mesa);
+        }
+        //Si se escoge mas de una carta de la mesa
+        else if(tipoJugadavalidador > 1){
+            eVal.masCartasSeleccionadas(cartasSeleccionadasMesa, cartaLanzada, cartasSumar, mesa, ultimaCartaLanzada, equipoActual);
+        }
     }
 }
