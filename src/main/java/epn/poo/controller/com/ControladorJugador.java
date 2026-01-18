@@ -2,28 +2,27 @@ package epn.poo.controller.com;
 
 import java.util.ArrayList;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author santi
- */
 public class ControladorJugador {
+    
     public void botarCarta(ArrayList<Carta> maso, ArrayList<Carta> mesa, Carta cartaSeleccionada){
-        for (Carta s : maso){
-            if(s.equals(cartaSeleccionada)){
-                mesa.add(s);
-                maso.remove(s);
+        // Buscar y remover la carta del maso
+        for (int i = 0; i < maso.size(); i++) {
+            if(maso.get(i).equals(cartaSeleccionada)){
+                mesa.add(maso.get(i));
+                maso.remove(i);
+                break; // Salir después de encontrar y remover
             }
         }
     }
     
     public void cojerCartas(ArrayList<Carta> cartasLlevadas, ArrayList<Carta> cartonEquipo, ArrayList<Carta> mesa){
+        // Primero agregar al cartón
         for(Carta c : cartasLlevadas){
             cartonEquipo.add(c);
+        }
+        
+        // Luego remover de la mesa
+        for(Carta c : cartasLlevadas){
             mesa.remove(c);
         }
     }

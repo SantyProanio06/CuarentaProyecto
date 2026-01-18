@@ -18,6 +18,11 @@ public class PanelMano extends JPanel {
         refrescar();
     }
 
+    public void actualizarMano(ArrayList<Carta> nuevaMano) {
+        this.mano = nuevaMano;
+        this.cartaSeleccionada = null;
+    }
+
     public void refrescar() {
         removeAll();
 
@@ -26,7 +31,7 @@ public class PanelMano extends JPanel {
 
             btn.addActionListener(e -> {
                 cartaSeleccionada = c;
-                refrescar(); // refresca para mostrar selección
+                refrescar();
             });
 
             // Marcar visualmente la seleccionada

@@ -3,6 +3,7 @@ package epn.poo.gui.com;
 import epn.poo.controller.com.Carta;
 import java.awt.FlowLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
@@ -18,6 +19,8 @@ public class PanelMesa extends JPanel {
 
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setBorder(BorderFactory.createTitledBorder("Mesa"));
+        setBackground(new Color(34, 139, 34)); // Verde mesa
+        setPreferredSize(new Dimension(800, 200));
         refrescarMesa();
     }
 
@@ -54,8 +57,9 @@ public class PanelMesa extends JPanel {
     public ArrayList<Carta> getCartasSeleccionadas() {
         return cartasSeleccionadas;
     }
+    
     public void agregarCarta(Carta carta) {
-    mesa.add(carta);
-    refrescarMesa();
-}
+        mesa.add(carta);
+        refrescarMesa();
+    }
 }

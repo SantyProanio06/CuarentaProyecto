@@ -57,9 +57,12 @@ public class FrameInicio extends JFrame {
         Equipo equipo2 = new Equipo();
 
         // === Crear jugadores ===
+        ArrayList<Jugador> jugadores = new ArrayList<>();
+        
         for (int i = 1; i <= numJugadores; i++) {
             Jugador j = new Jugador();
             j.setNombreJugador("Jugador " + i);
+            jugadores.add(j);
 
             if (numJugadores == 2) {
                 if (i == 1) equipo1.getJugadores().add(j);
@@ -74,14 +77,17 @@ public class FrameInicio extends JFrame {
         Baraja baraja = new Baraja();
         ControladorCartas controladorCartas = new ControladorCartas();
 
-        // Mano inicial (solo visual por ahora)
-        ArrayList<Carta> manoJugador = controladorCartas.repartirCartas(baraja.getBaraja());
+        // Repartir cartas a cada jugador
+        for (Jugador j : jugadores) {
+            ArrayList<Carta> mano = controladorCartas.repartirCartas(baraja.getBaraja());
+            j.setMasoJugador(mano);
+        }
 
         // Mesa vacía
         ArrayList<Carta> mesa = new ArrayList<>();
 
         // === Abrir ventana del juego ===
-        Ventanajuego juego = new Ventanajuego(mesa, manoJugador, equipo1);
+        Ventanajuego juego = new Ventanajuego(mesa, jugadores, equipo1, equipo2, numJugadores);
         juego.setVisible(true);
 
         // Cerrar menú
