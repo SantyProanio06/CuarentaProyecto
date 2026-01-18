@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class RulerManager {
   
-    public void RulerManager(ArrayList<Carta> mesa, ArrayList<Carta> cartaSelecMesa, 
+    public void manager(ArrayList<Carta> mesa, ArrayList<Carta> cartaSelecMesa, 
             Carta cLanzada, Equipo equipo, Carta ultLanzada){
        RulerController rc = new RulerController();
        ControladorJugador cj = new ControladorJugador();
