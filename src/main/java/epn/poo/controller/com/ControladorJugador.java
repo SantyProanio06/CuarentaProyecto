@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author santi
  */
-public class ConroladorJugador {
+public class ControladorJugador {
     public void botarCarta(ArrayList<Carta> maso, ArrayList<Carta> mesa, Carta cartaSeleccionada){
         for (Carta s : maso){
             if(s.equals(cartaSeleccionada)){
