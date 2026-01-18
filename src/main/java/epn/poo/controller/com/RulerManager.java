@@ -60,7 +60,7 @@ public class RulerManager {
                 if(jugadaValidaLLevar == true){
                 if(rulerCont.esCaida(cartasSeleccionadasMesa.get(0), cartaLanzada, ultimaCartaLanzada))
                     equipoActual.aumentarPerros();
-                if(rulerCont.esEscalera(2, cartasSeleccionadasMesa, cartaLanzada)== true){
+                if(rulerCont.esEscalera(1, cartasSeleccionadasMesa, cartaLanzada)== true){
                         cogerCartasValidarLimpia(mesa, cartasSeleccionadasMesa);
                     }
                 }
