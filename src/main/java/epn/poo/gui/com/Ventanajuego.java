@@ -4,13 +4,8 @@ import epn.poo.controller.com.Carta;
 import epn.poo.controller.com.RulerManager;
 import epn.poo.controller.com.Equipo;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.BorderFactory;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Ventanajuego extends JFrame {
@@ -20,6 +15,7 @@ public class Ventanajuego extends JFrame {
 
     private PanelMesa panelMesa;
     private PanelMano panelMano;
+    private PanelCambioTurno panelCambioTurno;
 
     private JButton btnLanzar;
     private JButton btnLlevar;
@@ -29,6 +25,8 @@ public class Ventanajuego extends JFrame {
 
     private RulerManager rulerManager;
     private Equipo equipoActual;
+
+    private int turno = 1;
 
     public Ventanajuego(ArrayList<Carta> mesa, ArrayList<Carta> manoJugador, Equipo equipoActual) {
 
@@ -40,6 +38,7 @@ public class Ventanajuego extends JFrame {
         configurarVentana();
         inicializarComponentes();
         agregarComponentes();
+        configurarEventos();
     }
 
     private void configurarVentana() {
@@ -51,24 +50,26 @@ public class Ventanajuego extends JFrame {
     }
 
     private void inicializarComponentes() {
+
         panelMesa = new PanelMesa(mesa);
         panelMano = new PanelMano(manoJugador);
+        panelCambioTurno = new PanelCambioTurno();
+        panelCambioTurno.setVisible(false);
 
         btnLanzar = new JButton("Lanzar carta");
         btnLlevar = new JButton("Llevar cartas");
 
-        lblEquipo = new JLabel("Equipo actual");
+        lblEquipo = new JLabel("Jugador " + turno);
         lblPerros = new JLabel("Perros: " + equipoActual.getPerros());
     }
 
     private void agregarComponentes() {
-        // Panel superior (info)
-        JPanel panelInfo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JPanel panelInfo = new JPanel(new FlowLayout());
         panelInfo.setBorder(BorderFactory.createEtchedBorder());
         panelInfo.add(lblEquipo);
         panelInfo.add(lblPerros);
 
-        // Panel acciones
         JPanel panelAcciones = new JPanel(new FlowLayout());
         panelAcciones.setBorder(BorderFactory.createTitledBorder("Acciones"));
         panelAcciones.add(btnLanzar);
@@ -78,9 +79,53 @@ public class Ventanajuego extends JFrame {
         add(panelMesa, BorderLayout.CENTER);
         add(panelMano, BorderLayout.SOUTH);
         add(panelAcciones, BorderLayout.EAST);
+        add(panelCambioTurno, BorderLayout.CENTER);
     }
 
-    // Llamar este método cuando aumenten perros
+    private void configurarEventos() {
+
+        btnLanzar.addActionListener(e -> lanzarCarta());
+
+        panelCambioTurno.getBtnContinuar().addActionListener(e -> continuarTurno());
+    }
+
+    private void lanzarCarta() {
+
+        Carta carta = panelMano.getCartaSeleccionada();
+
+        if (carta == null) {
+            JOptionPane.showMessageDialog(this, "Selecciona una carta para lanzar");
+            return;
+        }
+
+        panelMano.quitarCarta(carta);
+        panelMesa.agregarCarta(carta);
+
+        mostrarCambioTurno();
+    }
+
+    private void mostrarCambioTurno() {
+
+        turno = (turno == 1) ? 2 : 1;
+
+        panelCambioTurno.setJugador("Jugador " + turno);
+        panelCambioTurno.setVisible(true);
+
+        panelMesa.setVisible(false);
+        panelMano.setVisible(false);
+    }
+
+    private void continuarTurno() {
+
+        panelCambioTurno.setVisible(false);
+
+        panelMesa.setVisible(true);
+        panelMano.setVisible(true);
+
+        lblEquipo.setText("Jugador " + turno);
+        panelMano.refrescar();
+    }
+
     public void refrescarPerros() {
         lblPerros.setText("Perros: " + equipoActual.getPerros());
     }

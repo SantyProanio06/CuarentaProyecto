@@ -54,4 +54,8 @@ public class PanelMesa extends JPanel {
     public ArrayList<Carta> getCartasSeleccionadas() {
         return cartasSeleccionadas;
     }
+    public void agregarCarta(Carta carta) {
+    mesa.add(carta);
+    refrescarMesa();
+}
 }

@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 public class PanelMano extends JPanel {
 
     private ArrayList<Carta> mano;
+    private Carta cartaSeleccionada;
 
     public PanelMano(ArrayList<Carta> manoJugador) {
         this.mano = manoJugador;
@@ -21,15 +22,32 @@ public class PanelMano extends JPanel {
         removeAll();
 
         for (Carta c : mano) {
-            add(new BotonCarta(c));
+            BotonCarta btn = new BotonCarta(c);
+
+            btn.addActionListener(e -> {
+                cartaSeleccionada = c;
+                refrescar(); // refresca para mostrar selección
+            });
+
+            // Marcar visualmente la seleccionada
+            if (c.equals(cartaSeleccionada)) {
+                btn.setSeleccionada(true);
+            }
+
+            add(btn);
         }
 
         revalidate();
         repaint();
     }
 
+    public Carta getCartaSeleccionada() {
+        return cartaSeleccionada;
+    }
+
     public void quitarCarta(Carta carta) {
         mano.remove(carta);
+        cartaSeleccionada = null;
         refrescar();
     }
 }
