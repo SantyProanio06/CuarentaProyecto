@@ -10,20 +10,34 @@ public class ControladorJugador {
             if(maso.get(i).equals(cartaSeleccionada)){
                 mesa.add(maso.get(i));
                 maso.remove(i);
-                break; // Salir después de encontrar y remover
+                break;
             }
         }
     }
     
-    public void cojerCartas(ArrayList<Carta> cartasLlevadas, ArrayList<Carta> cartonEquipo, ArrayList<Carta> mesa){
-        // Primero agregar al cartón
+    // Método actualizado: ahora recibe la carta lanzada también
+    public void cojerCartas(Carta cartaLanzada, ArrayList<Carta> cartasLlevadas, ArrayList<Carta> cartonEquipo, ArrayList<Carta> mesa){
+        System.out.println("  [cojerCartas] Agregando carta lanzada al cartón: " + cartaLanzada.getNumero());
+        System.out.println("  [cojerCartas] Tamaño del cartón antes: " + cartonEquipo.size());
+        
+        // Agregar la carta lanzada al cartón
+        cartonEquipo.add(cartaLanzada);
+        
+        // Agregar las cartas de la mesa al cartón
         for(Carta c : cartasLlevadas){
+            System.out.println("  [cojerCartas] Agregando carta de mesa al cartón: " + c.getNumero());
             cartonEquipo.add(c);
         }
         
-        // Luego remover de la mesa
+        System.out.println("  [cojerCartas] Tamaño del cartón después: " + cartonEquipo.size());
+        System.out.println("  [cojerCartas] Tamaño de mesa antes de remover: " + mesa.size());
+        
+        // Remover las cartas llevadas de la mesa
         for(Carta c : cartasLlevadas){
             mesa.remove(c);
+            System.out.println("  [cojerCartas] Removida de mesa: " + c.getNumero());
         }
+        
+        System.out.println("  [cojerCartas] Tamaño de mesa después de remover: " + mesa.size());
     }
 }

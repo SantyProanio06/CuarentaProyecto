@@ -20,6 +20,7 @@ public class Ventanajuego extends JFrame {
     private PanelMesa panelMesa;
     private PanelMano panelMano;
     private PanelCambioTurno panelCambioTurno;
+    private JPanel panelJuego; // Panel contenedor
 
     private JButton btnLanzar;
     private JButton btnLlevar;
@@ -64,11 +65,12 @@ public class Ventanajuego extends JFrame {
     }
 
     private void inicializarComponentes() {
-
         panelMesa = new PanelMesa(mesa);
         panelMano = new PanelMano(jugadores.get(indiceJugadorActual).getMasoJugador());
         panelCambioTurno = new PanelCambioTurno();
-        panelCambioTurno.setVisible(false);
+        
+        // Panel contenedor que usará CardLayout para alternar vistas
+        panelJuego = new JPanel(new CardLayout());
 
         btnLanzar = new JButton("Lanzar carta");
         btnLlevar = new JButton("Llevar cartas");
@@ -78,7 +80,6 @@ public class Ventanajuego extends JFrame {
     }
 
     private void agregarComponentes() {
-
         JPanel panelInfo = new JPanel(new FlowLayout());
         panelInfo.setBorder(BorderFactory.createEtchedBorder());
         panelInfo.add(lblEquipo);
@@ -89,22 +90,27 @@ public class Ventanajuego extends JFrame {
         panelAcciones.add(btnLanzar);
         panelAcciones.add(btnLlevar);
 
+        // Panel de juego principal
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.add(panelMesa, BorderLayout.CENTER);
+        panelPrincipal.add(panelMano, BorderLayout.SOUTH);
+
+        // Agregar ambos paneles al CardLayout
+        panelJuego.add(panelPrincipal, "JUEGO");
+        panelJuego.add(panelCambioTurno, "CAMBIO");
+
         add(panelInfo, BorderLayout.NORTH);
-        add(panelMesa, BorderLayout.CENTER);
-        add(panelMano, BorderLayout.SOUTH);
+        add(panelJuego, BorderLayout.CENTER);
         add(panelAcciones, BorderLayout.EAST);
-        add(panelCambioTurno, BorderLayout.CENTER);
     }
 
     private void configurarEventos() {
-
         btnLanzar.addActionListener(e -> lanzarCarta());
         btnLlevar.addActionListener(e -> llevarCartas());
         panelCambioTurno.getBtnContinuar().addActionListener(e -> continuarTurno());
     }
 
     private void lanzarCarta() {
-
         Carta cartaSeleccionada = panelMano.getCartaSeleccionada();
 
         if (cartaSeleccionada == null) {
@@ -112,18 +118,26 @@ public class Ventanajuego extends JFrame {
             return;
         }
 
+        System.out.println("Lanzando carta: " + cartaSeleccionada.getNumero());
+        System.out.println("Cartas en mesa antes: " + mesa.size());
+
         // Remover carta del maso del jugador
-        ArrayList<Carta> masoActual = jugadores.get(indiceJugadorActual).getMasoJugador();
-        masoActual.remove(cartaSeleccionada);
+        jugadores.get(indiceJugadorActual).getMasoJugador().remove(cartaSeleccionada);
         
         // Agregar a la mesa
         mesa.add(cartaSeleccionada);
+        
+        System.out.println("Cartas en mesa después: " + mesa.size());
+        
+        // Actualizar última carta lanzada
+        ultimaCartaLanzada = cartaSeleccionada;
         
         // Actualizar interfaz
         panelMano.quitarCarta(cartaSeleccionada);
         panelMesa.refrescarMesa();
         
-        ultimaCartaLanzada = cartaSeleccionada;
+        // Actualizar botones
+        actualizarBotones();
 
         // Verificar si se acabaron las cartas del jugador
         verificarFinRonda();
@@ -145,30 +159,40 @@ public class Ventanajuego extends JFrame {
 
         Equipo equipoActual = obtenerEquipoActual();
 
-        // Primero lanzar la carta a la mesa
-        ArrayList<Carta> masoActual = jugadores.get(indiceJugadorActual).getMasoJugador();
-        masoActual.remove(cartaLanzada);
-        mesa.add(cartaLanzada);
+        System.out.println("=== LLEVAR CARTAS ===");
+        System.out.println("Carta lanzada: " + cartaLanzada.getNumero());
+        System.out.println("Cartas seleccionadas: " + cartasSeleccionadas.size());
+        System.out.println("Cartas en mesa antes: " + mesa.size());
+
+        // Remover carta del maso del jugador
+        jugadores.get(indiceJugadorActual).getMasoJugador().remove(cartaLanzada);
         panelMano.quitarCarta(cartaLanzada);
 
-        // Luego ejecutar la jugada de llevar cartas
+        // NO agregamos la carta a la mesa aquí porque rulerManager lo manejará
+        // El rulerManager agregará la carta al cartón junto con las seleccionadas
+        
+        // Ejecutar la jugada de llevar cartas
         rulerManager.rulerManagermetodo(cartaLanzada, cartasSeleccionadas, mesa, equipoActual, ultimaCartaLanzada);
+
+        System.out.println("Cartas en mesa después: " + mesa.size());
+        System.out.println("=== FIN LLEVAR ===");
 
         // Actualizar última carta lanzada
         ultimaCartaLanzada = cartaLanzada;
 
+        // Refrescar después de la jugada
         panelMesa.refrescarMesa();
         refrescarPerros();
+
+        // Actualizar botones
+        actualizarBotones();
 
         // Verificar si se acabaron las cartas
         verificarFinRonda();
     }
 
     private void verificarFinRonda() {
-        // Verificar si el jugador actual no tiene más cartas
         if (jugadores.get(indiceJugadorActual).getMasoJugador().isEmpty()) {
-            
-            // Verificar si todos los jugadores terminaron sus cartas
             boolean todosVacios = true;
             for (Jugador j : jugadores) {
                 if (!j.getMasoJugador().isEmpty()) {
@@ -179,22 +203,17 @@ public class Ventanajuego extends JFrame {
 
             if (todosVacios) {
                 rondasJugadas++;
-                
-                // Si es de 2 jugadores son 4 rondas, si es de 4 jugadores son 2 rondas
                 int rondasPorMano = (numJugadores == 2) ? 4 : 2;
                 
                 if (rondasJugadas < rondasPorMano) {
-                    // Repartir nuevas cartas
                     repartirNuevaRonda();
                 } else {
-                    // Fin de la mano, calcular cartón
                     finalizarMano();
                 }
                 return;
             }
         }
 
-        // Pasar al siguiente jugador
         mostrarCambioTurno();
     }
 
@@ -212,13 +231,10 @@ public class Ventanajuego extends JFrame {
     }
 
     private void finalizarMano() {
-        // Calcular cartón
         calcularCarton(equipo1);
         calcularCarton(equipo2);
-
         refrescarPerros();
 
-        // Verificar ganador
         if (equipo1.getPerros() >= 40) {
             JOptionPane.showMessageDialog(this, "¡Equipo 1 gana con " + equipo1.getPerros() + " perros!");
             System.exit(0);
@@ -229,7 +245,6 @@ public class Ventanajuego extends JFrame {
             JOptionPane.showMessageDialog(this, 
                 "Mano terminada.\nEquipo 1: " + equipo1.getPerros() + " perros\nEquipo 2: " + equipo2.getPerros() + " perros");
             
-            // Reiniciar para nueva mano
             rondasJugadas = 0;
             baraja = new Baraja();
             repartirNuevaRonda();
@@ -243,7 +258,6 @@ public class Ventanajuego extends JFrame {
             int exceso = totalCarton - 20;
             int perrosGanados = exceso + 6;
             
-            // Redondear a par más cercano
             if (perrosGanados % 2 != 0) {
                 perrosGanados--;
             }
@@ -253,28 +267,25 @@ public class Ventanajuego extends JFrame {
     }
 
     private void mostrarCambioTurno() {
-
         indiceJugadorActual = (indiceJugadorActual + 1) % jugadores.size();
 
         panelCambioTurno.setJugador(jugadores.get(indiceJugadorActual).getNombreJugador());
-        panelCambioTurno.setVisible(true);
-
-        panelMesa.setVisible(false);
-        panelMano.setVisible(false);
+        
+        // Cambiar a la vista de cambio de turno
+        CardLayout cl = (CardLayout) panelJuego.getLayout();
+        cl.show(panelJuego, "CAMBIO");
+        
         btnLanzar.setVisible(false);
         btnLlevar.setVisible(false);
     }
 
     private void continuarTurno() {
-
-        panelCambioTurno.setVisible(false);
-
-        panelMesa.setVisible(true);
-        panelMano.setVisible(true);
+        // Cambiar a la vista de juego
+        CardLayout cl = (CardLayout) panelJuego.getLayout();
+        cl.show(panelJuego, "JUEGO");
 
         lblEquipo.setText(jugadores.get(indiceJugadorActual).getNombreJugador());
         
-        // Actualizar el panel de mano con las cartas del jugador actual
         panelMano.actualizarMano(jugadores.get(indiceJugadorActual).getMasoJugador());
         panelMano.refrescar();
         panelMesa.refrescarMesa();
@@ -283,11 +294,9 @@ public class Ventanajuego extends JFrame {
     }
 
     private void actualizarBotones() {
-        // Siempre mostrar el botón lanzar
         btnLanzar.setEnabled(true);
         btnLanzar.setVisible(true);
         
-        // Solo mostrar "Llevar cartas" si hay cartas en la mesa
         if (mesa.size() > 0) {
             btnLlevar.setEnabled(true);
             btnLlevar.setVisible(true);
@@ -298,8 +307,6 @@ public class Ventanajuego extends JFrame {
     }
 
     private Equipo obtenerEquipoActual() {
-        // Si es de 2 jugadores: jugador 0 = equipo1, jugador 1 = equipo2
-        // Si es de 4 jugadores: jugadores 0,1 = equipo1, jugadores 2,3 = equipo2
         if (numJugadores == 2) {
             return (indiceJugadorActual == 0) ? equipo1 : equipo2;
         } else {
