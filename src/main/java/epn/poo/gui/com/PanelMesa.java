@@ -12,6 +12,7 @@ public class PanelMesa extends JPanel {
 
     private ArrayList<Carta> mesa;
     private ArrayList<Carta> cartasSeleccionadas;
+    private Runnable selectionListener;
 
     public PanelMesa(ArrayList<Carta> mesa) {
         this.mesa = mesa;
@@ -25,27 +26,23 @@ public class PanelMesa extends JPanel {
         refrescarMesa();
     }
 
+    public void addSelectionListener(Runnable listener) {
+        this.selectionListener = listener;
+    }
+
     public void refrescarMesa() {
-        System.out.println("=== REFRESCAR MESA ===");
-        System.out.println("Cartas en mesa: " + mesa.size());
-        
         removeAll();
         cartasSeleccionadas.clear();
 
         for (int i = 0; i < mesa.size(); i++) {
             Carta c = mesa.get(i);
-            System.out.println("Creando botón para carta " + (i+1) + ": " + c.getNumero() + " - " + c.getImagePath());
             BotonCarta boton = new BotonCarta(c);
             boton.addActionListener(e -> manejarSeleccion(boton));
             add(boton);
         }
-        
-        System.out.println("Total de componentes agregados: " + getComponentCount());
 
         revalidate();
         repaint();
-        
-        System.out.println("=== FIN REFRESCAR ===");
     }
 
     private void manejarSeleccion(BotonCarta boton) {
@@ -57,6 +54,11 @@ public class PanelMesa extends JPanel {
         } else {
             cartasSeleccionadas.add(carta);
             boton.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+        }
+        
+        // Notificar que cambió la selección
+        if (selectionListener != null) {
+            selectionListener.run();
         }
     }
 

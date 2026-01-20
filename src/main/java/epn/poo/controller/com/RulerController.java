@@ -17,13 +17,13 @@ public class RulerController {
     }
     
     public boolean isSuma(ArrayList<Carta> cartasSelecSuma, Carta cartaSelec ){
-        boolean valor = false;
         int suma = 0;
         for(Carta c: cartasSelecSuma){
             suma += c.getNumero();
         }
-        if(suma == cartaSelec.getNumero())valor = true;
-        return valor;
+        if(suma > 7) return false;
+        if(suma == cartaSelec.getNumero())return true;
+        return false;
     }
     
     public boolean esCaida(Carta cSeleccionada, Carta cLanzada, Carta cUltimaLanzada){

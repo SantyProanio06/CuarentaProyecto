@@ -10,12 +10,17 @@ public class PanelMano extends JPanel {
 
     private ArrayList<Carta> mano;
     private Carta cartaSeleccionada;
+    private Runnable selectionListener;
 
     public PanelMano(ArrayList<Carta> manoJugador) {
         this.mano = manoJugador;
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setBorder(BorderFactory.createTitledBorder("Tu mano"));
         refrescar();
+    }
+
+    public void addSelectionListener(Runnable listener) {
+        this.selectionListener = listener;
     }
 
     public void actualizarMano(ArrayList<Carta> nuevaMano) {
@@ -32,6 +37,11 @@ public class PanelMano extends JPanel {
             btn.addActionListener(e -> {
                 cartaSeleccionada = c;
                 refrescar();
+                
+                // Notificar que cambió la selección
+                if (selectionListener != null) {
+                    selectionListener.run();
+                }
             });
 
             // Marcar visualmente la seleccionada

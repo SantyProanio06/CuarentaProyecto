@@ -7,29 +7,26 @@ public class EstadosValidacion {
     
     public EstadosValidacion(){}
     
-    public void unaCartaSeleccionada(Carta cLanz, Carta cSelec , Carta cUlt, Equipo e, ArrayList<Carta> m){
-        System.out.println("  [unaCartaSeleccionada] Validando carta lanzada: " + cLanz.getNumero() + " con carta seleccionada: " + cSelec.getNumero());
-        
+    public boolean unaCartaSeleccionada(Carta cLanz, Carta cSelec , Carta cUlt, Equipo e, ArrayList<Carta> m){
         if(rc.isAgarrarCarta(cLanz, cSelec)){
-            System.out.println("  [unaCartaSeleccionada] ✓ Puede agarrar carta (números iguales)");
             
             ArrayList<Carta> selec = new ArrayList<>();
             selec.add(cSelec);
             
             // Verificar si es caída
             if(cUlt != null && rc.esCaida(cSelec, cLanz, cUlt)){
-                System.out.println("  [unaCartaSeleccionada] ✓ Es caída! +2 perros");
                 e.aumentarPerros();
             }
             
             // Siempre llevar las cartas si los números coinciden
             cogerCartasValidarLimpia(cLanz, m, selec, e);
+            return true;
         } else {
-            System.out.println("  [unaCartaSeleccionada] ✗ No puede agarrar carta (números diferentes)");
+            return false;
         }
     }
     
-    public void masCartasSeleccionadas(ArrayList<Carta> cSelec, Carta cLanz, 
+    public boolean masCartasSeleccionadas(ArrayList<Carta> cSelec, Carta cLanz, 
             ArrayList<Carta> cSum, ArrayList<Carta> m, Carta cUlt, Equipo e){
         Carta firstC = cSelec.get(0);
         
@@ -37,16 +34,20 @@ public class EstadosValidacion {
             if(rc.isSuma(cSum, cLanz)){
                 if(cSelec.size() == 2){
                     cogerCartasValidarLimpia(cLanz, m, cSelec, e);
+                    return true;
                 }else if(rc.esEscalera(2, cSelec, cLanz)){
                     cogerCartasValidarLimpia(cLanz, m, cSelec, e);
+                    return true;
                 }
             }
         }else{
             if(rc.isAgarrarCarta(cLanz, firstC)){
                 if(rc.esCaida(firstC, cLanz, cUlt)) e.aumentarPerros();
                 if(rc.esEscalera(1, cSelec, cLanz)) cogerCartasValidarLimpia(cLanz, m, cSelec, e);
-            }
+             return true;
+            }else return false;
         }
+        return false;
     }
     
     // Método actualizado: ahora recibe la carta lanzada

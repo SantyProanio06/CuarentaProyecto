@@ -13,7 +13,7 @@ public class RulerManager {
     public RulerManager() {
     }
   
-    public void rulerManagermetodo(Carta cartaLanzada, ArrayList<Carta> cartasSeleccionadasMesa,
+    public boolean rulerManagermetodo(Carta cartaLanzada, ArrayList<Carta> cartasSeleccionadasMesa,
     ArrayList<Carta> mesa, Equipo equipoActual, Carta ultimaCartaLanzada){
         ArrayList<Carta> cartasSumar = new ArrayList<Carta>();
         if(cartasSeleccionadasMesa.size() > 1){
@@ -24,11 +24,27 @@ public class RulerManager {
      
         // Validación de si es que solo se escoge una carta de la mesa
         if(tipoJugadavalidador == 1){
-            eVal.unaCartaSeleccionada(cartaLanzada, cartasSeleccionadasMesa.get(0), ultimaCartaLanzada, equipoActual, mesa);
+            return eVal.unaCartaSeleccionada(cartaLanzada, cartasSeleccionadasMesa.get(0), ultimaCartaLanzada, equipoActual, mesa);
         }
         // Si se escoge más de una carta de la mesa
         else if(tipoJugadavalidador > 1){
-            eVal.masCartasSeleccionadas(cartasSeleccionadasMesa, cartaLanzada, cartasSumar, mesa, ultimaCartaLanzada, equipoActual);
+            return eVal.masCartasSeleccionadas(cartasSeleccionadasMesa, cartaLanzada, cartasSumar, mesa, ultimaCartaLanzada, equipoActual);
+        }
+        return false;
+    }
+    
+     public void calcularCarton(Equipo e) {
+        int totalCarton = e.getCarton().size();
+        
+        if (totalCarton > 19) {
+            int cartonSumar = totalCarton - 20;
+            int perrosGanados = 6;
+            while (cartonSumar != 0){
+                perrosGanados ++;
+                cartonSumar--;
+            }
+            if(perrosGanados %2 != 0)perrosGanados++;
+            e.setPerros(e.getPerros() + perrosGanados);
         }
     }
 }
