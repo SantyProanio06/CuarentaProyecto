@@ -1,6 +1,7 @@
 package epn.poo.controller.com;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class RulerManager {
 
@@ -15,6 +16,7 @@ public class RulerManager {
   
     public boolean rulerManagermetodo(Carta cartaLanzada, ArrayList<Carta> cartasSeleccionadasMesa,
     ArrayList<Carta> mesa, Equipo equipoActual, Carta ultimaCartaLanzada){
+        cartasSeleccionadasMesa.sort(Comparator.comparingInt(c -> c.getNumero()));
         ArrayList<Carta> cartasSumar = new ArrayList<Carta>();
         if(cartasSeleccionadasMesa.size() > 1){
             cartasSumar.add(cartasSeleccionadasMesa.get(0));

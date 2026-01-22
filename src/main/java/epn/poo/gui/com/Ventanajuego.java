@@ -243,6 +243,7 @@ public class Ventanajuego extends JFrame {
             rondasJugadas = 0;
             baraja = new Baraja();
             repartirNuevaRonda();
+            mesa.clear();
         }
     }
 
