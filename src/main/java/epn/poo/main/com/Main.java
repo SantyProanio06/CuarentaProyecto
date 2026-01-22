@@ -1,7 +1,12 @@
 package epn.poo.main.com;
 
+import javax.swing.SwingUtilities;
+
 public class Main {
     public static void main(String[] args) {
-        new FrameInicio().setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            FrameInicio frame = new FrameInicio();
+            frame.setVisible(true);
+        });
     }
 }

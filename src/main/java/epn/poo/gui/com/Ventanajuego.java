@@ -323,6 +323,15 @@ public class Ventanajuego extends JFrame {
     }
 
     public void refrescarPerros() {
-        lblPerros.setText("Perros Equipo 1: " + equipo1.getPerros() + " | Equipo 2: " + equipo2.getPerros());
+    String nombreEquipo1 = equipo1.getJugadores().get(0).getNombreJugador();
+    String nombreEquipo2 = equipo2.getJugadores().get(0).getNombreJugador();
+    
+    if (numJugadores == 4) {
+        nombreEquipo1 += " & " + equipo1.getJugadores().get(1).getNombreJugador();
+        nombreEquipo2 += " & " + equipo2.getJugadores().get(1).getNombreJugador();
     }
+    
+    lblPerros.setText("Perros " + nombreEquipo1 + ": " + equipo1.getPerros() + 
+                      " | " + nombreEquipo2 + ": " + equipo2.getPerros());
+}
 }
