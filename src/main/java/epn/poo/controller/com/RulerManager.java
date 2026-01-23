@@ -37,15 +37,18 @@ public class RulerManager {
     
      public void calcularCarton(Equipo e) {
         int totalCarton = e.getCarton().size();
-        
+        System.out.println("Hay carton" + e.getCarton().size());
         if (totalCarton > 19) {
             int cartonSumar = totalCarton - 20;
             int perrosGanados = 6;
+            System.out.println("Hay 6 puntos");
             while (cartonSumar != 0){
                 perrosGanados ++;
+                System.out.println("Hay " + (perrosGanados) + " puntos");
                 cartonSumar--;
             }
             if(perrosGanados %2 != 0)perrosGanados++;
+            System.out.println("perros" + perrosGanados);
             e.setPerros(e.getPerros() + perrosGanados);
         }
     }

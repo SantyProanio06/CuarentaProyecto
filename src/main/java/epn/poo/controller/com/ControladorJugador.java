@@ -17,7 +17,8 @@ public class ControladorJugador {
     
     // Método actualizado: ahora recibe la carta lanzada también
     public void cojerCartas(Carta cartaLanzada, ArrayList<Carta> cartasLlevadas, ArrayList<Carta> cartonEquipo, ArrayList<Carta> mesa){
-        
+        System.out.println("DEBUG cojerCartas - Mesa antes: " + mesa.size() + " cartas");
+        System.out.println("DEBUG cojerCartas - Llevando: " + cartasLlevadas.size() + " cartas de la mesa");
         // Agregar la carta lanzada al cartón
         cartonEquipo.add(cartaLanzada);
         
@@ -29,8 +30,6 @@ public class ControladorJugador {
 
         
         // Remover las cartas llevadas de la mesa
-        for(Carta c : cartasLlevadas){
-            mesa.remove(c);
-        }
+        mesa.removeAll(cartasLlevadas);
     }
 }

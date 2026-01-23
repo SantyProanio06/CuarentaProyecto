@@ -112,10 +112,15 @@ public class Ventanajuego extends JFrame {
     }
 
     private void lanzarCarta() {
+        // Deshabilitar botones inmediatamente para evitar doble clic
+        btnLanzar.setEnabled(false);
+        btnLlevar.setEnabled(false);
+        
         Carta cartaSeleccionada = panelMano.getCartaSeleccionada();
 
         if (cartaSeleccionada == null) {
             JOptionPane.showMessageDialog(this, "Selecciona una carta para lanzar");
+            actualizarBotones();
             return;
         }
 
@@ -140,27 +145,37 @@ public class Ventanajuego extends JFrame {
     }
 
     private void llevarCartas() {
+        // Deshabilitar botones inmediatamente para evitar doble clic
+        btnLlevar.setEnabled(false);
+        btnLanzar.setEnabled(false);
+        
         Carta cartaLanzada = panelMano.getCartaSeleccionada();
         ArrayList<Carta> cartasSeleccionadas = panelMesa.getCartasSeleccionadas();
 
         if (cartaLanzada == null) {
             JOptionPane.showMessageDialog(this, "Selecciona una carta de tu mano para lanzar");
+            actualizarBotones();
             return;
         }
 
         if (cartasSeleccionadas.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Selecciona al menos una carta de la mesa");
+            actualizarBotones();
             return;
         }
 
         Equipo equipoActual = obtenerEquipoActual();
 
+        // IMPORTANTE: Crear una COPIA de las cartas seleccionadas
+        // para evitar problemas de referencia
+        ArrayList<Carta> cartasSeleccionadasCopia = new ArrayList<>(cartasSeleccionadas);
+
         // Remover carta del maso del jugador
         jugadores.get(indiceJugadorActual).getMasoJugador().remove(cartaLanzada);
         panelMano.quitarCarta(cartaLanzada);
 
-        // Ejecutar la jugada de llevar cartas
-        boolean jugadaValida = rulerManager.rulerManagermetodo(cartaLanzada, cartasSeleccionadas, mesa, equipoActual, ultimaCartaLanzada);
+        // Ejecutar la jugada de llevar cartas con la COPIA
+        boolean jugadaValida = rulerManager.rulerManagermetodo(cartaLanzada, cartasSeleccionadasCopia, mesa, equipoActual, ultimaCartaLanzada);
 
         if (!jugadaValida) {
             // Si la jugada no es válida, devolver la carta al maso
@@ -173,7 +188,7 @@ public class Ventanajuego extends JFrame {
         }
 
         // Actualizar última carta lanzada
-        ultimaCartaLanzada = cartaLanzada;
+        ultimaCartaLanzada = null;
 
         // Refrescar después de la jugada
         panelMesa.refrescarMesa();
@@ -243,7 +258,10 @@ public class Ventanajuego extends JFrame {
             rondasJugadas = 0;
             baraja = new Baraja();
             repartirNuevaRonda();
+            System.out.println("reiniciando mesa");
             mesa.clear();
+            panelMesa.refrescarMesa();
+            System.out.println("mesa vacia");
         }
     }
 
@@ -272,43 +290,15 @@ public class Ventanajuego extends JFrame {
         actualizarBotones();
     }
 
-    private void actualizarBotones() {
+   private void actualizarBotones() {
         // Siempre mostrar el botón lanzar
         btnLanzar.setEnabled(true);
         btnLanzar.setVisible(true);
         
-        // Verificar si se puede llevar cartas
-        Carta cartaSeleccionadaMano = panelMano.getCartaSeleccionada();
-        ArrayList<Carta> cartasSeleccionadasMesa = panelMesa.getCartasSeleccionadas();
-        
-        // Solo mostrar "Llevar cartas" si:
-        // 1. Hay cartas en la mesa
-        // 2. Hay una carta seleccionada de la mano
-        // 3. Hay al menos una carta seleccionada de la mesa
-        // 4. La jugada es válida según el RulerManager
-        
-        if (mesa.size() > 0 && cartaSeleccionadaMano != null && !cartasSeleccionadasMesa.isEmpty()) {
-            Equipo equipoActual = obtenerEquipoActual();
-            
-            // Crear una copia temporal de la mesa para validar sin modificar
-            ArrayList<Carta> mesaTemp = new ArrayList<>(mesa);
-            
-            // Verificar si la jugada sería válida
-            boolean esJugadaValida = rulerManager.rulerManagermetodo(
-                cartaSeleccionadaMano, 
-                cartasSeleccionadasMesa, 
-                mesaTemp, 
-                equipoActual, 
-                ultimaCartaLanzada
-            );
-            
-            if (esJugadaValida) {
-                btnLlevar.setEnabled(true);
-                btnLlevar.setVisible(true);
-            } else {
-                btnLlevar.setEnabled(false);
-                btnLlevar.setVisible(false);
-            }
+        // Mostrar "Llevar cartas" solo si hay cartas en la mesa
+        if (mesa.size() > 0) {
+            btnLlevar.setEnabled(true);
+            btnLlevar.setVisible(true);
         } else {
             btnLlevar.setEnabled(false);
             btnLlevar.setVisible(false);

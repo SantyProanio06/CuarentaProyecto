@@ -32,6 +32,8 @@ public class RulerController {
     }
     
     public boolean esLimpia(ArrayList<Carta> mesa){
+        System.out.println("DEBUG esLimpia - Verificando mesa con " + mesa.size() + " cartas");
+        System.out.println("DEBUG esLimpia - ¿Está vacía? " + mesa.isEmpty());
         return mesa.isEmpty(); 
     }
     
