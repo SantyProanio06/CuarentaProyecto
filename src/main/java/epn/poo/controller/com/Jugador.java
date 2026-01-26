@@ -9,6 +9,7 @@ import java.util.ArrayList;
 /**
  *Clase que representa un Jugador en el sistema
  * @author santi
+ * @author sebas
  */
 public class Jugador {
     private String nombreJugador;

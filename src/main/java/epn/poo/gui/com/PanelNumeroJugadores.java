@@ -7,7 +7,7 @@ package epn.poo.gui.com;
 import javax.swing.JButton;
 
 /**
- *
+ *Panel que pregunta la cantidad de jugadores
  * @author santi
  */
 public class PanelNumeroJugadores extends javax.swing.JPanel {

@@ -7,7 +7,7 @@ package epn.poo.gui.com;
 import javax.swing.JButton;
 
 /**
- *
+ *Esta clase reprensenta la pantalla de inicio
  * @author santi
  */
 public class PanelInicio extends javax.swing.JPanel {

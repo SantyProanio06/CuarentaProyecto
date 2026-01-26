@@ -6,12 +6,20 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 
+/**
+ * Representa la parte visual del maso del jugador
+ * @author sebas
+ */
 public class PanelMano extends JPanel {
 
     private ArrayList<Carta> mano;
     private Carta cartaSeleccionada;
     private Runnable selectionListener;
 
+    /**
+     *  Genera los botones del maso del jugador
+     * @param manoJugador es el maso del jugador
+     */
     public PanelMano(ArrayList<Carta> manoJugador) {
         this.mano = manoJugador;
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -19,6 +27,7 @@ public class PanelMano extends JPanel {
         refrescar();
     }
 
+    
     public void addSelectionListener(Runnable listener) {
         this.selectionListener = listener;
     }
@@ -28,6 +37,9 @@ public class PanelMano extends JPanel {
         this.cartaSeleccionada = null;
     }
 
+    /**
+     * refresca la parte visual del maso 
+     */
     public void refrescar() {
         removeAll();
 

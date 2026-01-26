@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author sebas
+ */
 public class FrameInicio extends JFrame {
 
     private PanelInicio panelInicio;
@@ -18,6 +22,9 @@ public class FrameInicio extends JFrame {
         configurarEventos();
     }
 
+    /**
+     * Configura la ventana de juego 
+     */
     private void configurarVentana() {
         setTitle("Cuarenta - Juego de Cartas");
         setSize(500, 300);
@@ -25,17 +32,28 @@ public class FrameInicio extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Inicia el juego de manera visual con panle Inicio
+     */
     private void inicializarComponentes() {
         panelInicio = new PanelInicio();
         setContentPane(panelInicio);
     }
 
+    /**
+     * configura los otones del panel inicio
+     */
     private void configurarEventos() {
         // Eventos del Panel Inicio
         panelInicio.getBtnJugar().addActionListener(e -> abrirPanelNumeroJugadores());
         panelInicio.getBtnComoJugar().addActionListener(e -> abrirPanelComoJugar());
     }
 
+    /**
+     * sirve para abrir paneles de juego 
+     * @param titulo
+     * @param panel 
+     */
     private void abrirPanel(String titulo, JPanel panel) {
         JFrame f = new JFrame(titulo);
         f.setContentPane(panel);
@@ -45,6 +63,9 @@ public class FrameInicio extends JFrame {
         f.setVisible(true);
     }
 
+    /**
+     * abre el tutorial
+     */
     private void abrirPanelComoJugar() {
         PanelComoJugar panelComoJugar = new PanelComoJugar();
         
@@ -60,6 +81,9 @@ public class FrameInicio extends JFrame {
         f.setVisible(true);
     }
 
+    /**
+     * abre el panel numero de jugadores
+     */
     private void abrirPanelNumeroJugadores() {
         PanelNumeroJugadores panelNumeroJugadores = new PanelNumeroJugadores();
         
@@ -85,6 +109,10 @@ public class FrameInicio extends JFrame {
         f.setVisible(true);
     }
 
+    /**
+     * Abre el registro de jugadores
+     * @param numJugadores 
+     */
     private void abrirPanelRegistro(int numJugadores) {
         try {
             PanelRegisroJugadores panelRegistro = new PanelRegisroJugadores(numJugadores);
@@ -108,6 +136,10 @@ public class FrameInicio extends JFrame {
         }
     }
 
+    /**
+     * inia los parametros de inicio de juego
+     * @param numJugadores 
+     */
     private void iniciarJuego(int numJugadores) {
     try {
         // Leer nombres de jugadores del archivo

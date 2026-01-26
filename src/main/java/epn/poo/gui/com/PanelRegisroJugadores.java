@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *Maneja el registro de los jugadores
  * @author santi
  */
 public class PanelRegisroJugadores extends javax.swing.JPanel {
@@ -21,14 +21,21 @@ public class PanelRegisroJugadores extends javax.swing.JPanel {
     private int numJug;
     ManejoArchivo ma = new ManejoArchivo();
     
-    
+    /**
+     * comprueba la existencia del archivo y si no existe crea uno
+     * @param path
+     * @throws IOException 
+     */
     private void comprobarTexto(String path) throws IOException{
         File f = new File(path);
         File fp = f.getParentFile();
         if(fp != null && !fp.exists())fp.mkdirs();
         if(!f.exists())f.createNewFile(); 
     }
-    
+    /**
+     * obtiene los datos de los jugadores y los registra en un txt
+     * @throws IOException 
+     */
     private void registrarJugadores() throws IOException{
         String j1 = txtNombreJ1.getText().trim();
         String j2 = txtNombreJ2.getText().trim();
@@ -56,6 +63,10 @@ public class PanelRegisroJugadores extends javax.swing.JPanel {
         JOptionPane.showMessageDialog(null, "Jugadores registrados exitosamente!");
     }
     
+    /**
+     * muestra el registro de jugadores
+     * @throws IOException 
+     */
     private void mostrarReg() throws IOException{
         ArrayList<String> archivo = ma.obtenerTodos(path);
         StringBuilder sb = new StringBuilder();

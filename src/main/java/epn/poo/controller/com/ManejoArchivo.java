@@ -12,19 +12,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *
+ *Crea y lee los archivos deonde se guardaran los jugadores
  * @author santi
+ * @author sebas
  */
 public class ManejoArchivo {
     public ManejoArchivo (){}
     
+    /**
+     * Escribe el archivo de los jugadores 
+     * @param path 
+     * @param nuevo
+     * @throws IOException 
+     */
     public void escribirArchivo(String path, String nuevo) throws IOException{
      try (BufferedWriter bw = new BufferedWriter(new FileWriter(path,true))){
          bw.write(nuevo);
          bw.newLine();
      }
    }
-    
+    /**
+     * obtiene los jugadores guardados
+     * @param path
+     * @return
+     * @throws IOException 
+     */
     public ArrayList<String> obtenerTodos(String path) throws IOException{
        ArrayList<String> archivos = new ArrayList<>();
        try(BufferedReader br = new BufferedReader(new FileReader(path))){
