@@ -8,13 +8,16 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Clase que representa un panel de swing que a su vez representa la ventana donde, basicamente,
+ * se explica al usuario como usar el programa.
  * @author santi
+ * @author sebas
  */
 public class PanelComoJugar extends javax.swing.JPanel {
 
     /**
-     * Creates new form PanelComoJugar
+     * Constructor por defecto.
+     * solo inicializa los componentes.
      */
     public PanelComoJugar() {
         initComponents();
@@ -275,7 +278,11 @@ public class PanelComoJugar extends javax.swing.JPanel {
                 .addGap(6, 6, 6))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Boton que muestra en un cuadro de dialogo todas las relgas del juego del cuarenta.
+     * @param evt Evento que "escucha" un clikc en dicho boton
+     */
     private void btnReglasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReglasActionPerformed
         JOptionPane.showMessageDialog(null, reglasDelCuarenta);
     }//GEN-LAST:event_btnReglasActionPerformed
@@ -312,6 +319,7 @@ public class PanelComoJugar extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 
+    //Reglas del juego del cuarenta.
 String reglasDelCuarenta = "Estas son las reglas del 40\n" +
 "1. es un juego de dos o cuatro personas si es de cuatro personas se haran dos equipos de 2 personas\n" +
 "2. se conoce como mano a que un jugador baraje y reparta las cartas, cada mano esta compuesta de dos rondas donde el jugador de la mano reparte 5 cartas a cada persona jugador\n" +
@@ -331,7 +339,9 @@ String reglasDelCuarenta = "Estas son las reglas del 40\n" +
 "9. gana el jugador o equipo que obtenga 40 perros\n" +
 "10. cada mano cuando se termina se pasa al jugador de la derecha,";
 
-
+/**
+ * @return Boton de salir.
+ */
 public JButton getBtnSalir() {
     return btnSalir;
 }

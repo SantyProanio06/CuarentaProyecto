@@ -7,13 +7,19 @@ package epn.poo.controller.com;
 import java.util.ArrayList;
 
 /**
- *
- * @author HP
+ * Clase que representa un contenedor para todas las cartas de los naipes, cuenta
+ * con un metodo para obtener dicha baraja y un constructor donde se le agregan las 
+ * imagenes correspondientes.
+ * @author santi
+ * @author sebas
  */
 public class Baraja {
     private ArrayList<Carta> baraja = new ArrayList<Carta>();  
 
-    
+    /**
+     * Constrcutor por defectom donde se crean instancias de las 40 cartas para el juego
+     * del cuartena, con su numero y su direccion de imagen.
+     */
     public Baraja() {
 // Palo T
 baraja.add(new Carta(1, "/1_T.png"));
@@ -64,7 +70,10 @@ baraja.add(new Carta(9, "/9_P.png"));
 baraja.add(new Carta(10, "/10_P.png"));
 
     }
-
+    
+    /**
+     * @return Cartas de la baraja.
+     */
     public ArrayList<Carta> getBaraja() {
         return baraja;
     }
